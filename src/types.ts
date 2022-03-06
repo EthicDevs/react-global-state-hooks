@@ -15,6 +15,28 @@ export type FluxStandardAction<
   metas?: M;
 };
 
+export type FluxStandardActionFactory<
+  T extends string | symbol = string | symbol,
+  R extends Record<string, unknown> = Record<string, unknown>,
+  M extends Record<string, unknown> = Record<string, unknown>,
+> = ({
+  payload,
+  type,
+  metas,
+}: {
+  payload?: R;
+  type: string;
+  metas?: M;
+}) => FluxStandardAction<T, R, M>;
+
+export type FluxStandardThunk<S extends FluxBaseState = FluxBaseState> = (
+  dispatch: (action: FluxStandardAction) => Promise<void> | void,
+  action: FluxStandardActionFactory,
+  state: S,
+) => Promise<void>;
+
+export type ThunkGenerator = (...args: unknown[]) => FluxStandardAction;
+
 export interface DispatchLogger {
   logAction(action: FluxStandardAction): void;
 }
