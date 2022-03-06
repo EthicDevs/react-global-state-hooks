@@ -3,12 +3,18 @@ import type { FC, Reducer } from "react";
 import React, { useEffect, useMemo, useReducer } from "react";
 
 // lib
-import type { FluxBaseState, FluxStandardAction } from "./types";
+import {
+  FluxBaseState,
+  FluxStandardAction,
+  LoggerType,
+  StateLogger,
+} from "./types";
 import { GlobalStateContext } from "./context";
+import { getConsoleLogger } from "./helpers/consoleLogger";
 
 type GlobalStateProviderProps = {
   initialState: FluxBaseState;
-  rootReducer: Reducer<any, FluxStandardAction<any, string | symbol, any>>;
+  rootReducer: Reducer<any, FluxStandardAction>;
 };
 
 export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
@@ -25,13 +31,14 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
     () => ({
       dispatchAction,
       state,
+      getLogger: getConsoleLogger,
     }),
-    [dispatchAction, state]
+    [dispatchAction, state],
   );
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      console.log(`[state] =>`, state);
+      (getConsoleLogger(LoggerType.State) as StateLogger).logState(state);
     }
   }, [state]);
 

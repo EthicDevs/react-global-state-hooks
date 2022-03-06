@@ -28,6 +28,7 @@
   "scripts": {
     "test": "jest --verbose",
     "test:watch": "jest --verbose --watch",
+    "typecheck": "tsc --noEmit",
     "dev": "nodemon -e ts,.env -w .env -w . -x 'run-s build:ts test'",
     "build:clean": "rm -rf ./dist",
     "build:ts": "tsc",

@@ -3,9 +3,9 @@ import { FluxStandardAction } from "../types";
 
 // A factory function to make an action
 export function action<
-  R = Record<string, unknown>,
-  T = string,
-  M = Record<string, unknown>
+  R extends Record<string, unknown> = Record<string, unknown>,
+  T extends string = string,
+  M extends Record<string, unknown> = Record<string, unknown>,
 >({
   payload,
   type,
@@ -14,7 +14,7 @@ export function action<
   payload?: R;
   type: string;
   metas?: M;
-}): FluxStandardAction<R, T, M> {
+}): FluxStandardAction<T, R, M> {
   return Object.freeze({
     payload: payload,
     type: type as unknown as T,

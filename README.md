@@ -15,7 +15,7 @@ $ npm i @ethicdevs/react-global-state-hooks
 
 See this CodeSandBox for a [live editable demo](https://codesandbox.io/s/elegant-hertz-tzxkvp?file=/src/state/index.ts).
 
-### GlobalStateProvider
+---
 
 Add the `GlobalStateProvider` high enough in your tree so that children which needs state are into it.
 
@@ -144,10 +144,10 @@ export const initialState: AuthState = {
   user: null,
 };
 
-export const reducer: Reducer<
-  AuthState,
-  FluxStandardAction<any, ActionType, any>
-> = (state, action) => {
+export const reducer: Reducer<AuthState, FluxStandardAction<ActionType>> = (
+  state,
+  action,
+) => {
   switch (action.type) {
     case ActionTypes.SIGN_IN_REQUEST: {
       return {
@@ -218,7 +218,17 @@ export const selectAuthErrorMessage = (state: State) => {
 };
 ```
 
-#### useStore (prefered)
+---
+
+See this CodeSandBox for a [live editable demo](https://codesandbox.io/s/elegant-hertz-tzxkvp?file=/src/state/index.ts).
+
+<!-- TODO:
+
+## API docs
+
+### GlobalStateProvider
+
+#### useStore (preferred)
 
 #### useGlobalState (escape hatch)
 
@@ -230,7 +240,7 @@ export const selectAuthErrorMessage = (state: State) => {
 
 ##### action
 
-##### thunk
+##### thunk (todo)
 
 ### StateModule
 
@@ -239,6 +249,8 @@ export const selectAuthErrorMessage = (state: State) => {
 ### Selector
 
 #### useSelect
+
+-->
 
 ## License
 

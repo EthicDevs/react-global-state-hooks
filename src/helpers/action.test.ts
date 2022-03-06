@@ -1,4 +1,4 @@
-import * as lib from "./index";
+import * as lib from "./action";
 
 describe("action", () => {
   test("it should return a FluxStandardAction", () => {

@@ -6,21 +6,39 @@ export type { Dispatch, Reducer } from "react";
 export type FluxBaseState = { [key: string]: unknown };
 
 export type FluxStandardAction<
-  R = Record<string, unknown>,
-  T = string,
-  M = Record<string, unknown>
+  T extends string | symbol = string | symbol,
+  R extends Record<string, unknown> = Record<string, unknown>,
+  M extends Record<string, unknown> = Record<string, unknown>,
 > = {
   payload?: R;
   type: T;
   metas?: M;
 };
 
-export type GlobalStateContextType<S extends Record<string, unknown>> = {
-  dispatchAction: Dispatch<FluxStandardAction<any, string | symbol, any>>;
+export interface DispatchLogger {
+  logAction(action: FluxStandardAction): void;
+}
+
+export interface StateLogger<S extends FluxBaseState = FluxBaseState> {
+  logState(state: S): void;
+}
+
+export type Logger<S extends FluxBaseState = FluxBaseState> =
+  | DispatchLogger
+  | StateLogger<S>;
+
+export enum LoggerType {
+  Dispatch = "dispatch",
+  State = "state",
+}
+
+export type GlobalStateContextType<S extends FluxBaseState = FluxBaseState> = {
+  dispatchAction: Dispatch<FluxStandardAction>;
   state: S;
+  getLogger(type: LoggerType): Logger<S>;
 };
 
-export type StateModule<S = Record<string, unknown>> = {
+export type StateModule<S = FluxBaseState> = {
   key: string;
   actionTypes: Readonly<Record<Readonly<string>, string>>;
   reducer: Reducer<S, any>;

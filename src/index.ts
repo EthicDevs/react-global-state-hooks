@@ -2,18 +2,27 @@
 export type {
   CombineModulesReturn,
   Dispatch,
+  DispatchLogger,
   FluxBaseState,
   FluxStandardAction,
   GlobalStateContextType,
+  Logger,
+  LoggerType,
   Reducer,
+  StateLogger,
   StateModule,
 } from "./types";
 
 /* Constants */
 export { INITIAL_GLOBAL_STATE_CONTEXT_VALUE } from "./context";
 
-/* Factories */
-export { action, actionType, combineModules } from "./helpers";
+/* Helpers */
+export {
+  action,
+  actionType,
+  combineModules,
+  getConsoleLogger,
+} from "./helpers";
 
 /* Contexts */
 export { GlobalStateContext } from "./context";
