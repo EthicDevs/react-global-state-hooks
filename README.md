@@ -1,7 +1,7 @@
 # `react-global-state-hooks`
 
 [![NPM](https://img.shields.io/npm/v/typescript-library-starter?color=red)](https://www.npmjs.com/package/@ethicdevs/react-global-state-hooks)
-[![MIT License](https://img.shields.io/github/license/47ng/typescript-library-starter.svg?color=blue)](https://github.com/ethicdevs/react-global-state-hooks/blob/master/LICENSE)(https://dependabot.com)
+[![MIT License](https://img.shields.io/github/license/47ng/typescript-library-starter.svg?color=blue)](https://github.com/ethicdevs/react-global-state-hooks/blob/master/LICENSE)
 
 ## Installation
 
@@ -13,6 +13,8 @@ $ npm i @ethicdevs/react-global-state-hooks
 
 ## Usage
 
+See this CodeSandBox for a [live editable demo](https://codesandbox.io/s/elegant-hertz-tzxkvp?file=/src/state/index.ts).
+
 ### GlobalStateProvider
 
 Add the `GlobalStateProvider` high enough in your tree so that children which needs state are into it.
@@ -22,7 +24,7 @@ Add the `GlobalStateProvider` high enough in your tree so that children which ne
 import React from "react";
 import { GlobalStateProvider } from "@ethicdevs/react-global-state-hooks";
 
-import { initialState, rootReducer } from "./globalState";
+import { initialState, rootReducer } from "./state";
 
 const App = () => <>{/* Your app */}</>;
 const AppWithProviders = () => (
@@ -96,7 +98,7 @@ Let's defined some action types we'll implement in our reducer' in a second:
 
 ```ts
 // src/state/auth/actionType.ts
-import { actionType } from "../factories";
+import { actionType } from "@ethicdevs/react-global-state-hooks";
 
 // Module key.
 export const modKey = "auth";
@@ -190,25 +192,30 @@ And finally some selectors so its easy to retrieve data in the components: `
 
 ```ts
 // src/state/auth/selectors.ts
-import type { User } from "./reducer";
+import { FluxBaseState } from "@ethicdevs/react-global-state-hooks";
+
 import { AuthState } from "./reducer";
-import { FluxBaseState } from "../types";
 
 type State = {
   [x: string]: FluxBaseState;
   auth: AuthState;
 };
 
-export const selectCurrentUser = (state: State): User | null => state.auth.user;
+export const selectCurrentUser = (state: State) => {
+  return state.auth.user;
+};
 
-export const selectIsAuthenticated = (state: State): boolean =>
-  state.auth.authenticated;
+export const selectIsAuthenticated = (state: State) => {
+  return state.auth.authenticated;
+};
 
-export const selectIsAuthInProgress = (state: State): boolean =>
-  state.auth.loading;
+export const selectIsAuthInProgress = (state: State) => {
+  return state.auth.loading;
+};
 
-export const selectAuthErrorMessage = (state: State): boolean =>
-  state.auth.errorMessage;
+export const selectAuthErrorMessage = (state: State) => {
+  return state.auth.errorMessage;
+};
 ```
 
 #### useStore (prefered)
