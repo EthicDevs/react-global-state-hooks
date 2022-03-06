@@ -1,5 +1,8 @@
 /* Types */
 export type {
+  CombineModulesReturn,
+  Dispatch,
+  FluxBaseState,
   FluxStandardAction,
   GlobalStateContextType,
   Reducer,
