@@ -14,6 +14,7 @@ $ npm i @ethicdevs/react-global-state-hooks
 ## Usage
 
 See this CodeSandBox for a [live editable demo](https://codesandbox.io/s/elegant-hertz-tzxkvp?file=/src/state/index.ts).
+Or just run `cd example && yarn && yarn start` if you have cloned the repo already.
 
 ---
 

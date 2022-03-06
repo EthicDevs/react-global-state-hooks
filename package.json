@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "description": "Supercharge your react app with simple Flux based Global State based on react owns `useReducer` and eliminate the need for redux!",
   "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
   "author": {
