@@ -1,8 +1,5 @@
-import { FC, memo } from "react";
-import {
-  GlobalStateContext,
-  GlobalStateProvider,
-} from "@ethicdevs/react-global-state-hooks";
+import { FC } from "react";
+import { GlobalStateProvider } from "@ethicdevs/react-global-state-hooks";
 
 import { Dashboard } from "./components/Dashboard";
 import { default as HomeScreen } from "./screens/Home";
