@@ -22,7 +22,7 @@ type UseStoreAPI<
   action: typeof actionFactory;
   state: S;
   dispatch(action: FluxStandardAction): Promise<void> | void;
-  dispatch(thunk: FluxStandardThunk): Promise<void> | void;
+  dispatch(thunk: FluxStandardThunk): Promise<void>;
 };
 
 // useStore hook
