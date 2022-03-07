@@ -1,5 +1,6 @@
-import { FluxStandardThunk } from "@ethicdevs/react-global-state-hooks/dist/types";
-import { ActionTypes } from "../";
+import { FluxStandardThunk } from "@ethicdevs/react-global-state-hooks";
+
+import { ActionTypes } from "../actionTypes";
 
 const sleep1s = () =>
   new Promise((ok) => {

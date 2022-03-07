@@ -5,12 +5,15 @@ export type {
   DispatchLogger,
   FluxBaseState,
   FluxStandardAction,
+  FluxStandardActionFactory,
+  FluxStandardThunk,
   GlobalStateContextType,
   Logger,
   LoggerType,
   Reducer,
   StateLogger,
   StateModule,
+  ThunkGenerator,
 } from "./types";
 
 /* Constants */
