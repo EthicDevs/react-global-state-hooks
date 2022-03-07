@@ -25,6 +25,7 @@ export {
   actionType,
   combineModules,
   getConsoleLogger,
+  makeThunkActionType,
 } from "./helpers";
 
 /* Contexts */
