@@ -26,10 +26,36 @@ export function actionType(
  *   ...makeThunkActionType("SIGN_OUT", modKey),
  * });
  */
-export function makeThunkActionType(baseName: string, prefix?: string) {
+export function makeThunkActionType<B extends string, P extends string>(
+  baseName: B,
+  prefix?: P,
+): ThunkActionType<B, P> {
   return {
-    [`${baseName}_REQUEST`]: actionType(`${baseName}_REQUEST`, prefix),
-    [`${baseName}_SUCCESS`]: actionType(`${baseName}_SUCCESS`, prefix),
-    [`${baseName}_FAILURE`]: actionType(`${baseName}_FAILURE`, prefix),
-  };
+    [`${baseName}_${ThunkState.Request}`]: actionType(
+      `${baseName}_REQUEST`,
+      prefix,
+    ),
+    [`${baseName}_${ThunkState.Success}`]: actionType(
+      `${baseName}_SUCCESS`,
+      prefix,
+    ),
+    [`${baseName}_${ThunkState.Failure}`]: actionType(
+      `${baseName}_FAILURE`,
+      prefix,
+    ),
+  } as ThunkActionType<B, P>;
 }
+
+enum ThunkState {
+  Request = "REQUEST",
+  Success = "SUCCESS",
+  Failure = "FAILURE",
+}
+
+type ThunkActionType<
+  B extends string,
+  K extends string,
+  S extends ThunkState = ThunkState,
+> = {
+  [P in `${B}_${S}`]: `${K}/${P}`;
+};
