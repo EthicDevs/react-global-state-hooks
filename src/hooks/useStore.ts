@@ -21,8 +21,9 @@ type UseStoreAPI<
 > = {
   action: typeof actionFactory;
   state: S;
-  dispatch(action: FluxStandardAction): Promise<void> | void;
-  dispatch(thunk: FluxStandardThunk): Promise<void>;
+  dispatch(
+    actionOrThunk: FluxStandardAction | FluxStandardThunk<S>,
+  ): Promise<void> | void;
 };
 
 // useStore hook
