@@ -9,7 +9,6 @@ export type {
   FluxStandardThunk,
   GlobalStateContextType,
   Logger,
-  LoggerType,
   Reducer,
   StateLogger,
   StateModule,
@@ -36,3 +35,6 @@ export { GlobalStateProvider } from "./provider";
 
 /* Hooks */
 export { useGlobalState, useSelect, useStore } from "./hooks";
+
+/* Enums */
+export { LoggerType } from "./types";
