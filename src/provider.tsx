@@ -6,6 +6,7 @@ import React, { useEffect, useMemo, useReducer } from "react";
 import {
   FluxBaseState,
   FluxStandardAction,
+  Logger,
   LoggerType,
   StateLogger,
 } from "./types";
@@ -14,12 +15,14 @@ import { getConsoleLogger } from "./helpers/consoleLogger";
 
 type GlobalStateProviderProps = {
   initialState: FluxBaseState;
+  getLogger?: (loggerType: LoggerType) => Logger;
   rootReducer: Reducer<any, FluxStandardAction>;
 };
 
 export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
   children,
   initialState,
+  getLogger,
   rootReducer,
 }) => {
   const [state, dispatchAction] = useReducer<
@@ -27,20 +30,25 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
     typeof initialState
   >(rootReducer, initialState, () => initialState);
 
+  const getLoggerFn = useMemo(
+    () => (getLogger != null ? getLogger : getConsoleLogger),
+    [getLogger],
+  );
+
   const ctxValue = useMemo(
     () => ({
       dispatchAction,
       state,
-      getLogger: getConsoleLogger,
+      getLogger: getLoggerFn,
     }),
     [dispatchAction, state],
   );
 
   useEffect(() => {
     if (process.env.NODE_ENV === "development") {
-      (getConsoleLogger(LoggerType.State) as StateLogger).logState(state);
+      (getLoggerFn(LoggerType.State) as StateLogger).logState(state);
     }
-  }, [state]);
+  }, [state, getLoggerFn]);
 
   return (
     <GlobalStateContext.Provider value={ctxValue}>
