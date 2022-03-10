@@ -34,7 +34,7 @@ export { GlobalStateContext } from "./context";
 export { GlobalStateProvider } from "./provider";
 
 /* Hooks */
-export { useGlobalState, useSelect, useStore } from "./hooks";
+export { useSelect, useStore } from "./hooks";
 
 /* Enums */
 export { LoggerType } from "./types";

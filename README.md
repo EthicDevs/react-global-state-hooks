@@ -110,6 +110,11 @@ export const ActionTypes = Object.freeze({
   SIGN_IN_REQUEST: actionType("SIGN_IN_REQUEST", modKey),
   SIGN_IN_SUCCESS: actionType("SIGN_IN_SUCCESS", modKey),
   SIGN_IN_FAILURE: actionType("SIGN_IN_FAILURE", modKey),
+  // or shorter:
+  ...makeThunkActionType("SIGN_OUT", modKey),
+  // SIGN_OUT_REQUEST: auth/SIGN_OUT_REQUEST
+  // SIGN_OUT_SUCCESS: auth/SIGN_OUT_SUCCESS
+  // SIGN_OUT_FAILURE: auth/SIGN_OUT_FAILURE
 });
 ```
 
@@ -189,7 +194,7 @@ export const reducer: Reducer<AuthState, FluxStandardAction<ActionType>> = (
 };
 ```
 
-And finally some selectors so its easy to retrieve data in the components: `
+And finally some selectors so its easy to retrieve data in the components:
 
 ```ts
 // src/state/auth/selectors.ts
@@ -229,9 +234,7 @@ See this CodeSandBox for a [live editable demo](https://codesandbox.io/s/elegant
 
 ### GlobalStateProvider
 
-#### useStore (preferred)
-
-#### useGlobalState (escape hatch)
+#### useStore
 
 ### FluxStandardAction
 
