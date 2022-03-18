@@ -1,7 +1,7 @@
 # `react-global-state-hooks`
 
-[![NPM](https://img.shields.io/npm/v/typescript-library-starter?color=red)](https://www.npmjs.com/package/@ethicdevs/react-global-state-hooks)
-[![MIT License](https://img.shields.io/github/license/47ng/typescript-library-starter.svg?color=blue)](https://github.com/ethicdevs/react-global-state-hooks/blob/master/LICENSE)
+[![NPM](https://img.shields.io/npm/v/@ethicdevs/react-global-state-hooks?color=red)](https://www.npmjs.com/package/@ethicdevs/react-global-state-hooks)
+[![MIT License](https://img.shields.io/github/license/ethicdevs/react-global-state-hooks.svg?color=blue)](https://github.com/ethicdevs/react-global-state-hooks/blob/master/LICENSE)
 
 ## Installation
 
@@ -28,6 +28,7 @@ import { GlobalStateProvider } from "@ethicdevs/react-global-state-hooks";
 import { initialState, rootReducer } from "./state";
 
 const App = () => <>{/* Your app */}</>;
+
 const AppWithProviders = () => (
   <GlobalStateProvider initialState={initialState} rootReducer={rootReducer}>
     <App />

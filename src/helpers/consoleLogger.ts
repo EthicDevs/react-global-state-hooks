@@ -2,7 +2,7 @@
 import type { DispatchLogger, Logger, StateLogger } from "../types";
 import { LoggerType } from "../types";
 
-export const getConsoleLogger = (loggerType: LoggerType): Logger => {
+export function getConsoleLogger(loggerType: LoggerType): Logger {
   switch (loggerType) {
     case LoggerType.Dispatch: {
       return {
@@ -24,4 +24,4 @@ export const getConsoleLogger = (loggerType: LoggerType): Logger => {
       } as StateLogger;
     }
   }
-};
+}

@@ -54,7 +54,9 @@ export enum LoggerType {
   State = "state",
 }
 
-export type GlobalStateContextType<S extends FluxBaseState = FluxBaseState> = {
+export type GlobalStateContextType<
+  S extends { [x: string]: FluxBaseState } = { [x: string]: FluxBaseState },
+> = {
   dispatchAction: Dispatch<FluxStandardAction>;
   state: S;
   getLogger(type: LoggerType): Logger<S>;

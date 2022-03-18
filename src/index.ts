@@ -15,8 +15,17 @@ export type {
   ThunkGenerator,
 } from "./types";
 
+/* Enums */
+export { LoggerType } from "./types";
+
 /* Constants */
 export { INITIAL_GLOBAL_STATE_CONTEXT_VALUE } from "./context";
+
+/* Contexts */
+export { GlobalStateContext } from "./context";
+
+/* Providers */
+export { GlobalStateProvider } from "./provider";
 
 /* Helpers */
 export {
@@ -27,14 +36,5 @@ export {
   makeThunkActionType,
 } from "./helpers";
 
-/* Contexts */
-export { GlobalStateContext } from "./context";
-
-/* Providers */
-export { GlobalStateProvider } from "./provider";
-
 /* Hooks */
 export { useSelect, useStore } from "./hooks";
-
-/* Enums */
-export { LoggerType } from "./types";
