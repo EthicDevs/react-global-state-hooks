@@ -1,6 +1,6 @@
 {
   "name": "@ethicdevs/react-global-state-hooks",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Supercharge your react app with simple Flux based Global State based on react owns `useReducer` and eliminate the need for redux!",
   "main": "dist/index.js",
   "module": "dist/index.js",
