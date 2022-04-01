@@ -7,17 +7,22 @@
  *   RESET: actionType("RESET"),
  * });
  */
-export function actionType<B extends string, P extends string = "core">(
-  baseName: B,
-  prefix?: P,
-  joiner = "/",
-): StandardActionType<B, P> {
-  return [prefix, baseName].join(joiner) as unknown as StandardActionType<B, P>;
+export function actionType<
+  B extends string,
+  P extends string = "core",
+  J extends string = "/",
+>(baseName: B, prefix?: P, joiner?: J): ActionType<B, P, J> {
+  const aType = [prefix, baseName].join(joiner || "/");
+  return aType as unknown as ActionType<B, P, J>;
 }
 
-type StandardActionType<B extends string, P extends string> = {
-  [K in `${B}`]: `${P}/${K}`;
+type ActionType<B extends string, P extends string, J extends string> = {
+  this: `${P}${J}${B}`;
 };
+type StandardActionType<B extends string, P extends string, J extends string> =
+  {
+    [K in `${B}`]: `${P}${J}${K}`;
+  };
 
 /**
  * A factory function to make an object of action type
@@ -29,13 +34,14 @@ type StandardActionType<B extends string, P extends string> = {
  *   ...makeActionType("SET_USERNAME", modKey),
  * });
  */
-export function makeActionType<B extends string, P extends string = "core">(
-  baseName: B,
-  prefix?: P,
-): Record<B, StandardActionType<B, P>> {
+export function makeActionType<
+  B extends string,
+  P extends string = "core",
+  J extends string = "/",
+>(baseName: B, prefix?: P, joiner?: J): StandardActionType<B, P, J> {
   return {
-    [baseName]: actionType(baseName, prefix),
-  } as Record<B, StandardActionType<B, P>>;
+    [baseName]: actionType(baseName, prefix, joiner),
+  } as unknown as StandardActionType<B, P, J>;
 }
 
 /**
@@ -49,24 +55,28 @@ export function makeActionType<B extends string, P extends string = "core">(
  *   ...makeThunkActionType("SIGN_OUT", modKey),
  * });
  */
-export function makeThunkActionType<B extends string, P extends string>(
-  baseName: B,
-  prefix?: P,
-): ThunkActionType<B, P> {
+export function makeThunkActionType<
+  B extends string,
+  P extends string = "core",
+  J extends string = "/",
+>(baseName: B, prefix?: P, joiner?: J): ThunkActionType<B, P, J> {
   return {
     [`${baseName}_${ThunkState.Request}`]: actionType(
       `${baseName}_REQUEST`,
       prefix as string,
+      joiner,
     ),
     [`${baseName}_${ThunkState.Success}`]: actionType(
       `${baseName}_SUCCESS`,
       prefix as string,
+      joiner,
     ),
     [`${baseName}_${ThunkState.Failure}`]: actionType(
       `${baseName}_FAILURE`,
       prefix as string,
+      joiner,
     ),
-  } as unknown as ThunkActionType<B, P>;
+  } as unknown as ThunkActionType<B, P, J>;
 }
 
 enum ThunkState {
@@ -78,7 +88,8 @@ enum ThunkState {
 type ThunkActionType<
   B extends string,
   K extends string,
+  J extends string,
   S extends ThunkState = ThunkState,
 > = {
-  [P in `${B}_${S}`]: `${K}/${P}`;
+  [P in `${B}_${S}`]: `${K}${J}${P}`;
 };
