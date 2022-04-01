@@ -7,12 +7,35 @@
  *   RESET: actionType("RESET"),
  * });
  */
-export function actionType(
-  name: string,
-  prefix = "core",
+export function actionType<B extends string, P extends string = "core">(
+  baseName: B,
+  prefix?: P,
   joiner = "/",
-): string {
-  return [prefix, name].join(joiner) as string;
+): StandardActionType<B, P> {
+  return [prefix, baseName].join(joiner) as unknown as StandardActionType<B, P>;
+}
+
+type StandardActionType<B extends string, P extends string> = {
+  [K in `${B}`]: `${P}/${K}`;
+};
+
+/**
+ * A factory function to make an object of action type
+ * to be rest-spread'ed into the ActionTypes of a module.
+ *
+ * @example
+ * // state/auth/actionTypes.ts
+ * export const ActionTypes = Object.freeze({
+ *   ...makeActionType("SET_USERNAME", modKey),
+ * });
+ */
+export function makeActionType<B extends string, P extends string = "core">(
+  baseName: B,
+  prefix?: P,
+): Record<B, StandardActionType<B, P>> {
+  return {
+    [baseName]: actionType(baseName, prefix),
+  } as Record<B, StandardActionType<B, P>>;
 }
 
 /**
@@ -33,17 +56,17 @@ export function makeThunkActionType<B extends string, P extends string>(
   return {
     [`${baseName}_${ThunkState.Request}`]: actionType(
       `${baseName}_REQUEST`,
-      prefix,
+      prefix as string,
     ),
     [`${baseName}_${ThunkState.Success}`]: actionType(
       `${baseName}_SUCCESS`,
-      prefix,
+      prefix as string,
     ),
     [`${baseName}_${ThunkState.Failure}`]: actionType(
       `${baseName}_FAILURE`,
-      prefix,
+      prefix as string,
     ),
-  } as ThunkActionType<B, P>;
+  } as unknown as ThunkActionType<B, P>;
 }
 
 enum ThunkState {

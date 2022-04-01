@@ -61,6 +61,12 @@
   "peerDependencies": {
     "react": ">=16.8.0"
   },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",
     "testEnvironment": "node"

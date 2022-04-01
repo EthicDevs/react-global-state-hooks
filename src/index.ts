@@ -33,6 +33,7 @@ export {
   actionType,
   combineModules,
   getConsoleLogger,
+  makeActionType,
   makeThunkActionType,
 } from "./helpers";
 
