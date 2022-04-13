@@ -12,6 +12,6 @@ export function useSelect<S extends FluxBaseState, R extends unknown>(
   return useMemo(
     () => selector(state as S) as R,
     // magic bit here, use the return of the selector to prevent useless renders
-    [selector, selector(state as S)],
+    [selector, state, selector(state as S)],
   );
 }
