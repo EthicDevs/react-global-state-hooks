@@ -51,7 +51,7 @@ export function useStore<
       }
       return dispatchAction(action);
     },
-    [dispatchAction],
+    [dispatchAction, getLogger, state],
   );
 
   return useMemo(
