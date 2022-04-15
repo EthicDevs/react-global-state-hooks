@@ -7,6 +7,9 @@ import { getConsoleLogger } from "./helpers/consoleLogger";
 
 export const INITIAL_GLOBAL_STATE_CONTEXT_VALUE: GlobalStateContextType = {
   state: {},
+  getState() {
+    return {};
+  },
   dispatchAction() {
     return {};
   },

@@ -3,10 +3,9 @@ import React, {
   FC,
   Reducer,
   useCallback,
-  useEffect,
   useMemo,
   useReducer,
-  useRef
+  useRef,
 } from "react";
 
 // lib
@@ -15,6 +14,7 @@ import {
   FluxBaseState,
   FluxStandardAction,
   FluxStandardThunk,
+  GlobalStateContextType,
   Logger,
   LoggerType,
   StateLogger,
@@ -39,11 +39,21 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
   const getState = useCallback(() => lastStateRef.current, []);
 
   const enhancedRootReducer = useRef(
-    (state: any, action: FluxStandardAction) =>
-      (lastStateRef.current = rootReducer(state, action))
+    (
+      state: typeof initialState,
+      action: FluxStandardAction,
+    ): typeof initialState => {
+      lastStateRef.current = rootReducer(state, action);
+      if (getLoggerFn != null && typeof getLoggerFn === "function") {
+        (getLoggerFn(LoggerType.State) as StateLogger).logState(
+          lastStateRef.current,
+        );
+      }
+      return lastStateRef.current;
+    },
   ).current;
 
-  const [state, dispatchAction] = useReducer<
+  const [_state, dispatchAction] = useReducer<
     typeof enhancedRootReducer,
     typeof initialState
   >(enhancedRootReducer, initialState, () => initialState);
@@ -60,7 +70,7 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
       // if param is a promise, we have a thunk.
       if (typeof actionOrThunk === "function") {
         const thunk = actionOrThunk as FluxStandardThunk;
-        return thunk(dispatch, actionFactory, state, getState);
+        return thunk(dispatch, actionFactory, initialState, getState);
       }
       // else, normal action,
       const action = actionOrThunk as FluxStandardAction;
@@ -71,23 +81,18 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
       // then dispatch it.
       return dispatchAction(action);
     },
-    [dispatchAction, getLoggerFn, getState, state],
+    [dispatchAction, getLoggerFn, getState],
   );
 
   const ctxValue = useMemo(
-    () => ({
-      dispatchAction: dispatch,
-      state,
-      getLogger: getLoggerFn,
-    }),
-    [dispatch, getLoggerFn, state],
+    () =>
+      ({
+        dispatchAction: dispatch,
+        getLogger: getLoggerFn,
+        getState: getState,
+      } as GlobalStateContextType),
+    [dispatch, getLoggerFn, getState],
   );
-
-  useEffect(() => {
-    if (getLoggerFn != null && typeof getLoggerFn === "function") {
-      (getLoggerFn(LoggerType.State) as StateLogger).logState(state);
-    }
-  }, [state, getLoggerFn]);
 
   return (
     <GlobalStateContext.Provider value={ctxValue}>

@@ -61,6 +61,7 @@ export type GlobalStateContextType<
   dispatchAction: Dispatch<FluxStandardAction>;
   state: S;
   getLogger(type: LoggerType): Logger<S>;
+  getState(): S;
 };
 
 export type StateModule<S = FluxBaseState> = {
