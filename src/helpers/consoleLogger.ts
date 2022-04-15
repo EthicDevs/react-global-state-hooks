@@ -7,19 +7,23 @@ export function getConsoleLogger(loggerType: LoggerType): Logger {
     case LoggerType.Dispatch: {
       return {
         logAction({ type: t, payload, metas }) {
-          console.log(
-            `[dispatch] ${String(t)} => payload:`,
-            payload,
-            "metas?:",
-            metas,
-          );
+          if (process.env.NODE_ENV === "development") {
+            console.log(
+              `[dispatch] ${String(t)} => payload:`,
+              payload,
+              "metas?:",
+              metas,
+            );
+          }
         },
       } as DispatchLogger;
     }
     case LoggerType.State: {
       return {
         logState(state) {
-          console.log(`[state] =>`, state);
+          if (process.env.NODE_ENV === "development") {
+            console.log(`[state] =>`, state);
+          }
         },
       } as StateLogger;
     }

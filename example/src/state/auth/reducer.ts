@@ -26,7 +26,7 @@ export const initialState: AuthState = {
   user: null,
 };
 
-export const reducer: Reducer<AuthState, FluxStandardAction<ActionType>> = (
+export const reducer: Reducer<AuthState, FluxStandardAction<string>> = (
   state,
   action,
 ) => {

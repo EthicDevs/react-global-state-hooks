@@ -13,10 +13,11 @@ const FluxRouter: FC = ({ children }) => {
 const App = () => {
   return (
     <>
-      <FluxRouter>
+      <h1>it works</h1>
+      {/* <FluxRouter>
         <Dashboard />
         <HomeScreen />
-      </FluxRouter>
+      </FluxRouter> */}
     </>
   );
 };

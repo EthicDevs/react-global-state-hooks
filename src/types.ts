@@ -32,7 +32,8 @@ export type FluxStandardActionFactory<
 export type FluxStandardThunk<S extends FluxBaseState = FluxBaseState> = (
   dispatch: (action: FluxStandardAction) => Promise<void> | void,
   action: FluxStandardActionFactory,
-  state: S,
+  initialState: S,
+  getState: () => S,
 ) => Promise<void>;
 
 export type ThunkGenerator = (...args: unknown[]) => FluxStandardAction;

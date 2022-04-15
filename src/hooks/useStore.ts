@@ -1,14 +1,8 @@
 // std
-import { useCallback, useMemo } from "react";
+import { useMemo } from "react";
 
 // lib
-import {
-  DispatchLogger,
-  FluxStandardAction,
-  FluxStandardThunk,
-  LoggerType,
-} from "../types";
-
+import { FluxStandardAction, FluxStandardThunk } from "../types";
 import { action as actionFactory } from "../helpers/action";
 import { useGlobalState } from "./useGlobalState";
 
@@ -33,33 +27,13 @@ export function useStore<
     Record<string, unknown>
   >,
 >(): UseStoreAPI<S> {
-  const { dispatchAction, state, getLogger } = useGlobalState();
-
-  const dispatch = useCallback(
-    (
-      actionOrThunk: FluxStandardAction | FluxStandardThunk<S>,
-    ): Promise<void> | void => {
-      // if param is a promise, we have a thunk.
-      if (typeof actionOrThunk === "function") {
-        const thunk = actionOrThunk as FluxStandardThunk;
-        return thunk(dispatch, actionFactory, state);
-      }
-      // else, normal action, dispatch it.
-      const action = actionOrThunk as FluxStandardAction;
-      if (process.env.NODE_ENV === "development") {
-        (getLogger(LoggerType.Dispatch) as DispatchLogger).logAction(action);
-      }
-      return dispatchAction(action);
-    },
-    [dispatchAction, getLogger, state],
-  );
-
+  const { dispatchAction, state } = useGlobalState();
   return useMemo(
     () => ({
       action: actionFactory,
-      dispatch,
+      dispatch: dispatchAction,
       state: state as S,
     }),
-    [dispatch, state],
+    [dispatchAction, state],
   );
 }
