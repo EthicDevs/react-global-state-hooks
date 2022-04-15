@@ -81,7 +81,7 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
         // try to ensure order of execution is always correct
         return new Promise(async (resolve, reject) => {
           try {
-            await thunk(dispatch, actionFactory, initialState, getState);
+            await thunk(dispatch, actionFactory, getState, initialState);
             return resolve(undefined);
           } catch (err) {
             return reject(err);
