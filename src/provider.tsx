@@ -26,7 +26,7 @@ import { getConsoleLogger } from "./helpers/consoleLogger";
 type GlobalStateProviderProps = {
   initialState: FluxBaseState;
   getLogger?: (loggerType: LoggerType) => Logger;
-  rootReducer: Reducer<any, FluxStandardAction>;
+  rootReducer: Reducer<FluxBaseState, FluxStandardAction>;
 };
 
 export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
@@ -39,11 +39,8 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
   const getState = useCallback(() => lastStateRef.current, []);
 
   const enhancedRootReducer = useRef(
-    (
-      state: typeof initialState,
-      action: FluxStandardAction,
-    ): typeof initialState => {
-      lastStateRef.current = rootReducer(state, action);
+    (prevState: FluxBaseState, action: FluxStandardAction): FluxBaseState => {
+      lastStateRef.current = rootReducer(prevState, action);
       if (getLoggerFn != null && typeof getLoggerFn === "function") {
         (getLoggerFn(LoggerType.State) as StateLogger).logState(
           lastStateRef.current,
