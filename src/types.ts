@@ -3,12 +3,13 @@ import type { Dispatch, Reducer } from "react";
 export type { Dispatch, Reducer } from "react";
 
 // lib
+export type FluxBaseRecord = Record<string, unknown>;
 export type FluxBaseState = { [key: string]: unknown };
 
 export type FluxStandardAction<
   T extends string | symbol = string | symbol,
-  R extends Record<string, unknown> = Record<string, unknown>,
-  M extends Record<string, unknown> = Record<string, unknown>,
+  R extends FluxBaseRecord = FluxBaseRecord,
+  M extends FluxBaseRecord = FluxBaseRecord,
 > = {
   payload?: R;
   type: T;
@@ -17,8 +18,8 @@ export type FluxStandardAction<
 
 export type FluxStandardActionFactory<
   T extends string | symbol = string | symbol,
-  R extends Record<string, unknown> = Record<string, unknown>,
-  M extends Record<string, unknown> = Record<string, unknown>,
+  R extends FluxBaseRecord = FluxBaseRecord,
+  M extends FluxBaseRecord = FluxBaseRecord,
 > = ({
   payload,
   type,

@@ -29,6 +29,17 @@ type GlobalStateProviderProps = {
   rootReducer: Reducer<FluxBaseState, FluxStandardAction>;
 };
 
+function isFluxStandardAction(
+  actionOrThunk: FluxStandardAction | FluxStandardThunk,
+): actionOrThunk is FluxStandardAction {
+  return typeof actionOrThunk !== "function";
+}
+function isFluxStandardThunk(
+  actionOrThunk: FluxStandardAction | FluxStandardThunk,
+): actionOrThunk is FluxStandardThunk {
+  return typeof actionOrThunk === "function";
+}
+
 export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
   children,
   initialState,
@@ -61,22 +72,35 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
   );
 
   const dispatch = useCallback(
-    (
-      actionOrThunk: FluxStandardAction | FluxStandardThunk,
-    ): Promise<void> | void => {
+    <AOT extends FluxStandardAction | FluxStandardThunk>(
+      actionOrThunk: AOT,
+    ): AOT extends FluxStandardThunk ? Promise<void> : void => {
       // if param is a promise, we have a thunk.
-      if (typeof actionOrThunk === "function") {
-        const thunk = actionOrThunk as FluxStandardThunk;
-        return thunk(dispatch, actionFactory, initialState, getState);
+      if (isFluxStandardThunk(actionOrThunk)) {
+        const thunk = actionOrThunk;
+        // try to ensure order of execution is always correct
+        return new Promise(async (resolve, reject) => {
+          try {
+            await thunk(dispatch, actionFactory, initialState, getState);
+            return resolve(undefined);
+          } catch (err) {
+            return reject(err);
+          }
+        }) as any;
+      } else if (isFluxStandardAction(actionOrThunk)) {
+        // else, normal action,
+        const action = actionOrThunk as FluxStandardAction;
+        // log it,
+        if (getLoggerFn != null && typeof getLoggerFn === "function") {
+          (getLoggerFn(LoggerType.Dispatch) as DispatchLogger).logAction(
+            action,
+          );
+        }
+        // then dispatch it.
+        return dispatchAction(action) as any;
+      } else {
+        return undefined as any;
       }
-      // else, normal action,
-      const action = actionOrThunk as FluxStandardAction;
-      // log it,
-      if (getLoggerFn != null && typeof getLoggerFn === "function") {
-        (getLoggerFn(LoggerType.Dispatch) as DispatchLogger).logAction(action);
-      }
-      // then dispatch it.
-      return dispatchAction(action);
     },
     [dispatchAction, getLoggerFn, getState],
   );
