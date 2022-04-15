@@ -53,7 +53,7 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
     },
   ).current;
 
-  const [_state, dispatchAction] = useReducer<
+  const [state, dispatchAction] = useReducer<
     typeof enhancedRootReducer,
     typeof initialState
   >(enhancedRootReducer, initialState, () => initialState);
@@ -90,8 +90,9 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
         dispatchAction: dispatch,
         getLogger: getLoggerFn,
         getState: getState,
+        state,
       } as GlobalStateContextType),
-    [dispatch, getLoggerFn, getState],
+    [dispatch, getLoggerFn, getState, state],
   );
 
   return (
