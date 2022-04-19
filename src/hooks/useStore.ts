@@ -15,6 +15,7 @@ type UseStoreAPI<
 > = {
   action: typeof actionFactory;
   state: S;
+  getState: () => S;
   dispatch(
     actionOrThunk: FluxStandardAction | FluxStandardThunk<S>,
   ): Promise<void> | void;
@@ -27,13 +28,14 @@ export function useStore<
     Record<string, unknown>
   >,
 >(): UseStoreAPI<S> {
-  const { dispatchAction, state } = useGlobalState();
+  const { dispatchAction, getState, state } = useGlobalState();
   return useMemo(
     () => ({
       action: actionFactory,
       dispatch: dispatchAction,
+      getState: getState as () => S,
       state: state as S,
     }),
-    [dispatchAction, state],
+    [dispatchAction, getState, state],
   );
 }
