@@ -229,6 +229,10 @@ export const selectAuthErrorMessage = (state: State) => {
 
 See this CodeSandBox for a [live editable demo](https://codesandbox.io/s/elegant-hertz-tzxkvp?file=/src/state/index.ts).
 
+## Debug
+
+`react-global-state-hooks` now has its own small devtool/debugger (cli/ui), so head over to [@ethicdevs/react-global-state-hooks-debugger](https://github.com/EthicDevs/react-global-state-hooks-debugger) to learn more about installation and usage!
+
 <!-- TODO:
 
 ## API docs
