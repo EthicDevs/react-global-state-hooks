@@ -1,13 +1,17 @@
 import * as React from "react";
 import "@testing-library/jest-dom";
-import { render } from "@testing-library/react";
+import { cleanup, render } from "@testing-library/react";
 
 import { GlobalStateProvider } from "./provider";
 import { combineModules } from "./helpers";
 import { FluxBaseState, FluxStandardAction } from "./types";
 
 describe("GlobalStateProvider", () => {
-  test("it should render correctly given empty module", () => {
+  afterAll(() => {
+    cleanup();
+  });
+
+  test("it should render correctly given no modules (empty obj)", () => {
     // Given
     const { initialState, rootReducer } = combineModules({});
     const TestComponent = () => {
@@ -78,7 +82,33 @@ describe("GlobalStateProvider", () => {
     expect(findByText("test")).toBeDefined();
   });
 
-  test("it should render correctly given many module", () => {
+  test("it should render and reduce correctly given many modules", async () => {
+    // Mock/spy
+    const mockReducerModuleOne = jest.fn(
+      (prevState: ModuleOneState, action: FluxStandardAction) => {
+        if (action.type === "ACTION_ONE") {
+          return {
+            ...prevState,
+            foo: true,
+          };
+        } else {
+          return prevState;
+        }
+      },
+    );
+    const mockReducerModuleTwo = jest.fn(
+      (prevState: ModuleTwoState, action: FluxStandardAction) => {
+        if (action.type === "ACTION_TWO") {
+          return {
+            ...prevState,
+            bar: false,
+          };
+        } else {
+          return prevState;
+        }
+      },
+    );
+
     // Given
     type ModuleOneState = { foo: boolean };
     type ModuleTwoState = { bar: boolean };
@@ -88,39 +118,26 @@ describe("GlobalStateProvider", () => {
         key: "moduleOne",
         initialState: { foo: false },
         actionTypes: { ACTION_ONE: "nsOne/ACTION_ONE" },
-        reducer: jest.fn(
-          (prevState: ModuleOneState, action: FluxStandardAction) => {
-            if (action.type === "ACTION_ONE") {
-              return {
-                ...prevState,
-                foo: true,
-              };
-            } else {
-              return prevState;
-            }
-          },
-        ),
+        reducer: mockReducerModuleOne,
       },
       moduleTwo: {
         key: "moduleTwo",
-        initialState: { foo: true },
+        initialState: { bar: true },
         actionTypes: { ACTION_TWO: "nsOne/ACTION_TWO" },
-        reducer: jest.fn(
-          (prevState: ModuleTwoState, action: FluxStandardAction) => {
-            if (action.type === "ACTION_TWO") {
-              return {
-                ...prevState,
-                bar: false,
-              };
-            } else {
-              return prevState;
-            }
-          },
-        ) as never,
+        reducer: mockReducerModuleTwo,
       },
     });
 
     const TestComponent = () => {
+      const [done, setDone] = React.useState(false);
+      // An effect that call the root reducer one first time.
+      React.useEffect(() => {
+        rootReducer(initialState, { type: "@@test/INIT" });
+        rootReducer(initialState, { type: "nsOne/ACTION_ONE" });
+        rootReducer(initialState, { type: "nsOne/ACTION_TWO" });
+        setDone(true);
+      }, []); // only on mount
+
       return (
         <GlobalStateProvider
           initialState={initialState}
@@ -132,14 +149,50 @@ describe("GlobalStateProvider", () => {
           }
         >
           <div id="test">test</div>
+          <div id="done">{done === true ? "done:yes" : "done:no"}</div>
         </GlobalStateProvider>
       );
     };
 
     // When
-    const { findByText } = render(<TestComponent />);
+    const { getByText, findByText } = render(<TestComponent />);
 
     // Then
-    expect(findByText("test")).toBeDefined();
+    expect(getByText("test")).toBeDefined();
+    expect(getByText("done:no")).toBeDefined();
+
+    await findByText("done:yes"); // wait for re-render
+
+    expect(mockReducerModuleOne).toHaveBeenNthCalledWith(
+      1,
+      { foo: false }, // initialState for this module
+      { type: "@@test/INIT" },
+    );
+    expect(mockReducerModuleOne).toHaveBeenNthCalledWith(
+      2,
+      { foo: false }, // initialState for this module
+      { type: "nsOne/ACTION_ONE" },
+    );
+    expect(mockReducerModuleOne).toHaveBeenNthCalledWith(
+      3,
+      { foo: false }, // initialState for this module
+      { type: "nsOne/ACTION_TWO" },
+    );
+
+    expect(mockReducerModuleTwo).toHaveBeenNthCalledWith(
+      1,
+      { bar: true }, // initialState for this module
+      { type: "@@test/INIT" },
+    );
+    expect(mockReducerModuleTwo).toHaveBeenNthCalledWith(
+      2,
+      { bar: true }, // initialState for this module
+      { type: "nsOne/ACTION_ONE" },
+    );
+    expect(mockReducerModuleTwo).toHaveBeenNthCalledWith(
+      3,
+      { bar: true }, // initialState for this module
+      { type: "nsOne/ACTION_TWO" },
+    );
   });
 });

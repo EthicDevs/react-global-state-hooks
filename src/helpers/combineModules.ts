@@ -3,7 +3,7 @@ import { CombineModulesReturn, Reducer, StateModule } from "../types";
 // A factory to make a single reducer out of many
 export function combineModules<
   M extends { [P in keyof M]: StateModule<M[P]["initialState"]> },
-  I extends { [Q in keyof M]: M[Q]["initialState"] }
+  I extends { [Q in keyof M]: M[Q]["initialState"] },
 >(modules: M): CombineModulesReturn<I> {
   const keys = Object.keys(modules);
 
@@ -26,7 +26,7 @@ export function combineModules<
       [key]: mod.initialState,
     };
 
-    // 3. Merge all reducers into a big array of functions to call in right order
+    // 3. Merge all reducers into a big [modKey, reducers] array to call in right order
     reducers = [...reducers, [key, mod.reducer as unknown as Reducer<M, any>]];
   });
 
@@ -34,7 +34,7 @@ export function combineModules<
     return reducers.reduce((acc, [key, reducer]) => {
       acc[key as keyof I] = reducer(
         state[key as keyof I] as unknown as M,
-        action
+        action,
       ) as unknown as I[keyof I];
       return acc;
     }, {} as I);

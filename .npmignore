@@ -7,3 +7,4 @@ example/
 nodemon.json
 tsconfig.json
 yarn-error.log
+coverage/
