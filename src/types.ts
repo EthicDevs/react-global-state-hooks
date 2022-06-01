@@ -37,6 +37,19 @@ export type FluxStandardThunk<S extends FluxBaseState = FluxBaseState> = (
   initialState: S,
 ) => Promise<void>;
 
+export type FluxRequestState<
+  P extends Record<string, unknown> = Record<string, unknown>,
+> = P & {
+  errorMessage: null | string;
+  loading: boolean;
+  requested: boolean;
+};
+
+export type FluxRequestsState<
+  K extends readonly string[] = readonly string[],
+  P extends Record<string, unknown> = Record<string, unknown>,
+> = Record<K[number], FluxRequestState<P>>;
+
 export type ThunkGenerator = (...args: unknown[]) => FluxStandardAction;
 
 export interface DispatchLogger {

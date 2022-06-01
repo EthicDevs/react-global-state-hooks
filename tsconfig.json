@@ -1,16 +1,22 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "es2018",
+    "target": "es5",
     "module": "commonjs",
     "jsx": "react",
-    "lib": [],
+    "lib": ["es2020"],
     "declaration": true,
     "outDir": "./dist",
     "rootDir": "./src",
+    "typeRoots": ["node_modules/@types"],
     "paths": {
       "*": ["types/*"]
     },
+
+    // Makes code working with es5 without scarifying on files size
+    // (needs "tslib" installed in the project importing this lib, see peerDependencies)
+    "importHelpers": true,
+    "downlevelIteration": true,
 
     // Strict Type-Checking Options
     "strict": true,
@@ -33,5 +39,12 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "exclude": ["./src/**/*.test.ts", "./dist", "./node_modules", "./example"]
+  "exclude": [
+    "./src/**/*.test.ts",
+    "./src/**/*.test.tsx",
+    "./dist",
+    "./node_modules",
+    "./example",
+    "**/node_modules/**"
+  ]
 }

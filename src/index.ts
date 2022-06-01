@@ -4,9 +4,12 @@ export type {
   Dispatch,
   DispatchLogger,
   FluxBaseState,
+  FluxBaseRecord,
   FluxStandardAction,
   FluxStandardActionFactory,
   FluxStandardThunk,
+  FluxRequestState,
+  FluxRequestsState,
   GlobalStateContextType,
   Logger,
   Reducer,
@@ -35,6 +38,7 @@ export {
   getConsoleLogger,
   makeActionType,
   makeThunkActionType,
+  makeInitialFluxRequests,
 } from "./helpers";
 
 /* Hooks */
