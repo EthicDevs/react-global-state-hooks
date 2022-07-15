@@ -3,6 +3,7 @@ import * as lib from "./requests";
 describe("makeInitialFluxRequests", () => {
   test("it should return an object of requests at their initial state", () => {
     // Given
+    const requests = ["test-req-1", "test-req-2", "test-req-3"] as const;
     const expectedInitialRequests = {
       "test-req-1": { errorMessage: null, loading: false, requested: false },
       "test-req-2": { errorMessage: null, loading: false, requested: false },
@@ -10,11 +11,7 @@ describe("makeInitialFluxRequests", () => {
     };
 
     // When
-    const initialRequests = lib.makeInitialFluxRequests([
-      "test-req-1",
-      "test-req-2",
-      "test-req-3",
-    ]);
+    const initialRequests = lib.makeInitialFluxRequests(requests);
 
     // Then
     expect(initialRequests).toStrictEqual(expectedInitialRequests);
@@ -22,6 +19,7 @@ describe("makeInitialFluxRequests", () => {
 
   test("it should return an object of requests at their initial state + custom payload", () => {
     // Given
+    const requests = ["test-req-1", "test-req-2", "test-req-3"] as const;
     const expectedInitialRequests = {
       "test-req-1": {
         errorMessage: null,
@@ -47,13 +45,10 @@ describe("makeInitialFluxRequests", () => {
     };
 
     // When
-    const initialRequests = lib.makeInitialFluxRequests(
-      ["test-req-1", "test-req-2", "test-req-3"],
-      {
-        foo: "bar",
-        baz: { quxx: true },
-      },
-    );
+    const initialRequests = lib.makeInitialFluxRequests(requests, {
+      foo: "bar",
+      baz: { quxx: true },
+    });
 
     // Then
     expect(initialRequests).toStrictEqual(expectedInitialRequests);

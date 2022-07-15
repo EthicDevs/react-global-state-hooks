@@ -1,4 +1,5 @@
 // std
+import memoize from "memoize-state";
 import { useMemo } from "react";
 
 // lib
@@ -8,11 +9,9 @@ import { useGlobalState } from "./useGlobalState";
 export function useSelect<S extends FluxBaseState, R extends unknown>(
   selector: (state: S) => R,
 ) {
-  const { getState, state } = useGlobalState();
+  const { getState } = useGlobalState();
   const lastState = getState();
-  return useMemo(
-    () => selector(lastState as S) as R,
-    // magic bit here, use the return of the selector to prevent useless renders
-    [selector, state, selector(lastState as S)],
-  );
+  const fastSelector = memoize(selector);
+  const val = fastSelector(lastState as S) as R;
+  return useMemo(() => val, [val]);
 }
