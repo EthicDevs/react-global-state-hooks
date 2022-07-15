@@ -21,7 +21,6 @@ import {
 } from "./types";
 import { GlobalStateContext } from "./context";
 import { action as actionFactory } from "./helpers/action";
-import { getConsoleLogger } from "./helpers/consoleLogger";
 
 type GlobalStateProviderProps = {
   initialState: FluxBaseState;
@@ -66,10 +65,7 @@ export const GlobalStateProvider: FC<GlobalStateProviderProps> = ({
     typeof initialState
   >(enhancedRootReducer, initialState, () => initialState);
 
-  const getLoggerFn = useMemo(
-    () => (getLogger != null ? getLogger : getConsoleLogger),
-    [getLogger],
-  );
+  const getLoggerFn = useMemo(() => getLogger, [getLogger]);
 
   const dispatch = useCallback(
     <AOT extends FluxStandardAction | FluxStandardThunk>(
