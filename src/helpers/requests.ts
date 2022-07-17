@@ -19,3 +19,39 @@ export function makeInitialFluxRequests<
     return acc;
   }, {} as FluxRequestsState<K, P>);
 }
+
+export function makeFluxRequest<
+  P extends Record<string, unknown> = Record<string, unknown>,
+>(requestBody: FluxRequestState<P>) {
+  return (props?: Partial<P>): FluxRequestState<P> => {
+    const requestPayload: FluxRequestState<P> = {
+      ...(props || {}),
+      ...requestBody,
+    };
+    return requestPayload as any;
+  };
+}
+
+export const makeInitialFluxRequest = makeFluxRequest({
+  errorMessage: null,
+  loading: false,
+  requested: false,
+});
+
+export const makeLoadingFluxRequest = makeFluxRequest({
+  errorMessage: null,
+  loading: true,
+  requested: true,
+});
+
+export const makeSuccessFluxRequest = makeFluxRequest({
+  errorMessage: null,
+  loading: false,
+  requested: true,
+});
+
+export const makeFailureFluxRequest = makeFluxRequest({
+  errorMessage: "",
+  loading: false,
+  requested: true,
+});

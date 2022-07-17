@@ -38,7 +38,12 @@ export {
   getConsoleLogger,
   makeActionType,
   makeThunkActionType,
+  makeFluxRequest,
   makeInitialFluxRequests,
+  makeInitialFluxRequest,
+  makeLoadingFluxRequest,
+  makeSuccessFluxRequest,
+  makeFailureFluxRequest,
 } from "./helpers";
 
 /* Hooks */
