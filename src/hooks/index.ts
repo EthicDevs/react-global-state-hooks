@@ -1,3 +1,3 @@
 /* Hooks */
-export { useSelect } from "./useSelect";
+export { useManySelect, useSelect } from "./useSelect";
 export { useStore } from "./useStore";

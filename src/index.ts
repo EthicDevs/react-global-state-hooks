@@ -47,4 +47,4 @@ export {
 } from "./helpers";
 
 /* Hooks */
-export { useSelect, useStore } from "./hooks";
+export { useManySelect, useSelect, useStore } from "./hooks";
